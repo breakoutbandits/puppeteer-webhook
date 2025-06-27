@@ -4,6 +4,16 @@ const puppeteer = require('puppeteer');
 const app = express();
 app.use(express.json());
 
+// ✅ Beveiliging met API-key via header
+const API_KEY = 'Bandits2022!';
+app.use('/run', (req, res, next) => {
+  const incomingKey = req.headers['x-api-key'];
+  if (incomingKey !== API_KEY) {
+    return res.status(403).json({ success: false, message: 'Forbidden: Invalid API key' });
+  }
+  next();
+});
+
 app.post('/run', async (req, res) => {
   const data = req.body;
 
@@ -23,7 +33,7 @@ app.post('/run', async (req, res) => {
     // 1. Ga naar de Loquiz loginpagina
     await page.goto('https://creator.loquiz.com/login', { waitUntil: 'networkidle2' });
 
-    // 2. Zoek de juiste inputvelden (op volgorde zoals ze voorkomen)
+    // 2. Zoek de juiste inputvelden
     const inputSelectors = await page.$$eval('input', inputs =>
       inputs.map(input => ({
         type: input.type,
@@ -31,7 +41,6 @@ app.post('/run', async (req, res) => {
       }))
     );
 
-    // Controle: welk veld is e-mail en welk wachtwoord
     const emailIndex = inputSelectors.findIndex(i => i.placeholder.toLowerCase().includes('email'));
     const passIndex = inputSelectors.findIndex(i => i.placeholder.toLowerCase().includes('password'));
 
@@ -65,5 +74,5 @@ app.get('/', (req, res) => {
   res.send('✅ Puppeteer-service draait');
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => console.log(`Server draait op poort ${PORT}`));
