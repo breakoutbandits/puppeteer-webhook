@@ -1,6 +1,3 @@
-app.post('/run', async (req, res) => {
-console.log('🚀 /run endpoint aangeroepen');
-
 const express = require('express');
 const puppeteer = require('puppeteer');
 
@@ -18,6 +15,7 @@ app.use('/run', (req, res, next) => {
 });
 
 app.post('/run', async (req, res) => {
+  console.log('🚀 /run endpoint aangeroepen');
   const data = req.body;
 
   const formData = {
