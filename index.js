@@ -1,3 +1,6 @@
+app.post('/run', async (req, res) => {
+console.log('🚀 /run endpoint aangeroepen');
+
 const express = require('express');
 const puppeteer = require('puppeteer');
 
