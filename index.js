@@ -25,7 +25,6 @@ app.post('/run', async (req, res) => {
 
   const browser = await puppeteer.launch({
     headless: "new", // voorkom warning
-    executablePath: puppeteer.executablePath(), // forceer juiste Chrome-pad
     args: ['--no-sandbox', '--disable-setuid-sandbox']
   });
 
