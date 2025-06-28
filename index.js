@@ -32,6 +32,7 @@ app.post('/run', async (req, res) => {
 
   try {
     // 1. Ga naar de Loquiz loginpagina
+    console.log('🌍 Navigeren naar inlogpagina...');
     await page.goto('https://creator.loquiz.com/login', { waitUntil: 'networkidle2' });
 
     // 2. Zoek de juiste inputvelden
@@ -57,6 +58,7 @@ app.post('/run', async (req, res) => {
 
     // 4. Controleer of je bent ingelogd
     const pageUrl = page.url();
+    console.log('🌐 Huidige URL na login:', pageUrl);
     if (pageUrl.includes('/dashboard') || !pageUrl.includes('/login')) {
       res.json({ success: true, message: 'Succesvol ingelogd op Loquiz!' });
     } else {
@@ -64,10 +66,11 @@ app.post('/run', async (req, res) => {
     }
 
   } catch (err) {
-    console.error(err);
+    console.error('❌ Fout tijdens loginproces:', err);
     res.status(500).json({ success: false, error: err.toString() });
   } finally {
     await browser.close();
+    console.log('🧹 Browser gesloten');
   }
 });
 
